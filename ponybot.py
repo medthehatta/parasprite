@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 import pickle
+import re
 
 def load_ponies():
   return pickle.load(open('ponysodes.pkl','rb'))
@@ -74,9 +75,18 @@ girls.rule = r'.*[Gg]irls.*'
 
 def grammar(phenny, input):
   """everybody->everypony""" 
-  pass 
-
-
+  read = str(input)
+  changed = False
+  replacements = [("everybody","every*pony*"),
+                  ("nobody", "no*pony*"),
+                  ("a hand", "a *hoof*")]
+  for (match,replace) in replacements:
+    if re.findall(match,read): 
+      changed = True
+      read = re.sub(match,replace,read)
+  if changed == True:
+    phenny.say("Don't you mean: \""+read+"\"?")
+grammar.rule = r'.*'
 
 
 
